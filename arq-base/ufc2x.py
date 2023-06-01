@@ -50,7 +50,7 @@ firmware[11] = 0b00001100_000_00010100_100000_000_010
 ## 12: MDR <- X; write; goto 0
 firmware[12] = 0b00000000_000_00010100_010000_100_011
 
-# goto address 
+# goto address
 
 ## 13: PC <- PC + 1; fetch; goto 14
 firmware[13] = 0b00001110_000_00110101_001000_001_001
@@ -90,9 +90,9 @@ BUS_C = 0
 
 def read_regs(reg_num):
     global MDR, PC, MBR, X, Y, H, BUS_A, BUS_B
-    
+
     BUS_A = H
-    
+
     if reg_num == 0:
         BUS_B = MDR
     elif reg_num == 1:
@@ -105,44 +105,43 @@ def read_regs(reg_num):
         BUS_B = Y
     else:
         BUS_B = 0
-            
+
 def write_regs(reg_bits):
 
     global MAR, BUS_C, MDR, PC, X, Y, H
 
     if reg_bits & 0b100000:
         MAR = BUS_C
-        
+
     if reg_bits & 0b010000:
         MDR = BUS_C
-        
+
     if reg_bits & 0b001000:
         PC = BUS_C
-        
+
     if reg_bits & 0b000100:
         X = BUS_C
-        
+
     if reg_bits & 0b000010:
         Y = BUS_C
-        
+
     if reg_bits & 0b000001:
         H = BUS_C
-        
-            
+
 def alu(control_bits):
 
     global BUS_A, BUS_B, BUS_C, N, Z
-    
-    a = BUS_A 
+
+    a = BUS_A
     b = BUS_B
     o = 0
-    
+
     shift_bits = control_bits & 0b11000000
     shift_bits = shift_bits >> 6
-    
+
     control_bits = control_bits & 0b00111111
-    
-    if control_bits == 0b011000: 
+
+    if control_bits == 0b011000:
         o = a
     elif control_bits == 0b010100:
         o = b
@@ -151,7 +150,7 @@ def alu(control_bits):
     elif control_bits == 0b101100:
         o = ~b
     elif control_bits == 0b111100:
-        o = a + b    
+        o = a + b
     elif control_bits == 0b111101:
         o = a + b + 1
     elif control_bits == 0b111001:
@@ -173,74 +172,73 @@ def alu(control_bits):
     elif control_bits == 0b110001:
         o = 1
     elif control_bits == 0b110010:
-        o = -1 
-        
+        o = -1
+
     if o == 0:
         N = 0
         Z = 1
     else:
         N = 1
         Z = 0
-        
+
     if shift_bits == 0b01:
         o = o << 1
     elif shift_bits == 0b10:
         o = o >> 1
     elif shift_bits == 0b11:
         o = o << 8
-        
+
     BUS_C = o
- 
 
 def next_instruction(next, jam):
 
     global MPC, MBR, N, Z
-    
+
     if jam == 0b000:
         MPC = next
         return
-        
+
     if jam & 0b001:                 # JAMZ
         next = next | (Z << 8)
-        
+
     if jam & 0b010:                 # JAMN
         next = next | (N << 8)
 
     if jam & 0b100:                 # JMPC
         next = next | MBR
-        
+
     MPC = next
 
 
 def memory_io(mem_bits):
 
     global PC, MBR, MDR, MAR
-    
+
     if mem_bits & 0b001:                # FETCH
        MBR = memory.read_byte(PC)
-       
+
     if mem_bits & 0b010:                # READ
        MDR = memory.read_word(MAR)
-       
+
     if mem_bits & 0b100:                # WRITE
        memory.write_word(MAR, MDR)
-       
+
 def step():
-   
+
     global MIR, MPC
-    
+
     MIR = firmware[MPC]
-    
+
     if MIR == 0:
-        return False    
-    
+        return False
+
     read_regs        ( MIR & 0b00000000000000000000000000000111)
     alu              ((MIR & 0b00000000000011111111000000000000) >> 12)
     write_regs       ((MIR & 0b00000000000000000000111111000000) >> 6)
     memory_io        ((MIR & 0b00000000000000000000000000111000) >> 3)
     next_instruction ((MIR & 0b11111111100000000000000000000000) >> 23,
                       (MIR & 0b00000000011100000000000000000000) >> 20)
-                      
+
     return True
 
 

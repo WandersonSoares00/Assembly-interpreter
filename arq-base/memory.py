@@ -34,12 +34,12 @@ def write_byte(add,val):
     val_word = memory[end_word]        # 34CC4F33
 
     end_byte = add & 0b11   # resto da divisão por 4
-    
+
     mask = ~(0xFF << (end_byte << 3))  # FF00FFFF
     val_word = val_word & mask         # 34004F33
 
     val = val << (end_byte << 3)       # val = 00DD0000
- 
+
     val_word = val_word | val          # val_word = 34DD4F33
 
     memory[end_word] = val_word
