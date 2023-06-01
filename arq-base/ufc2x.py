@@ -1,4 +1,3 @@
-
 import memory
 from array import array
 
@@ -23,7 +22,6 @@ firmware[4] = 0b000000101_000_00010100_000001_000_000
 
 ## 5: X <- H + X; goto 0
 firmware[5] = 0b000000000_000_00111100_000100_000_011
-
 
 # X = X - memory[address]
 
@@ -240,10 +238,3 @@ def step():
                       (MIR & 0b00000000011100000000000000000000) >> 20)
 
     return True
-
-
-
-
-
-
-
