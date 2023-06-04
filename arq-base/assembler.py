@@ -7,11 +7,11 @@ lines_bin = []
 names = []
 
 instructions = ['add', 'sub', 'goto', 'mov', 'jz', 'halt', 'wb', 'ww']
-instruction_set = {'add' : 0x02, 
-                   'sub' : 0x06, 
-                   'mov' : 0x0A, 
+instruction_set = {'add' : 0x02,
+                   'sub' : 0x06,
+                   'mov' : 0x0A,
                    'goto': 0x0D,
-                   'jz'  : 0x0F, 
+                   'jz'  : 0x0F,
                    'halt': 0xFF}
 
 def is_instruction(str):
@@ -22,7 +22,7 @@ def is_instruction(str):
          inst = True
          break
    return inst
-   
+
 def is_name(str):
    global names
    name = False
@@ -31,7 +31,7 @@ def is_name(str):
          name = True
          break
    return name
-   
+
 def encode_2ops(inst, ops):
    line_bin = []
    if len(ops) > 1:
@@ -48,19 +48,19 @@ def encode_goto(ops):
          line_bin.append(instruction_set['goto'])
          line_bin.append(ops[0])
    return line_bin
-   
+
 def encode_halt():
    line_bin = []
    line_bin.append(instruction_set['halt'])
    return line_bin
-   
+
 def encode_wb(ops):
    line_bin = []
    if len(ops) > 0:
       if ops[0].isnumeric():
          if int(ops[0]) < 256:
             line_bin.append(int(ops[0]))
-   return line_bin   
+   return line_bin
 
 def encode_ww(ops):
    line_bin = []
@@ -73,7 +73,7 @@ def encode_ww(ops):
             line_bin.append((val & 0xFF0000) >> 16)
             line_bin.append((val & 0xFF000000) >> 24)
    return line_bin
-      
+
 def encode_instruction(inst, ops):
    if inst == 'add' or inst == 'sub' or inst == 'mov' or inst == 'jz':
       return encode_2ops(inst, ops)
@@ -87,8 +87,7 @@ def encode_instruction(inst, ops):
       return encode_ww(ops)
    else:
       return []
-   
-   
+
 def line_to_bin_step1(line):
    line_bin = []
    if is_instruction(line[0]):
@@ -96,7 +95,7 @@ def line_to_bin_step1(line):
    else:
       line_bin = encode_instruction(line[1], line[2:])
    return line_bin
-   
+
 def lines_to_bin_step1():
    global lines
    for line in lines:
@@ -117,7 +116,7 @@ def find_names():
              break
       if is_label:
          names.append((lines[k][0], k))
-         
+
 def count_bytes(line_number):
    line = 0
    byte = 1
@@ -130,7 +129,7 @@ def get_name_byte(str):
    for name in names:
       if name[0] == str:
          return name[1]
-         
+
 def resolve_names():
    for i in range(0, len(names)):
       names[i] = (names[i][0], count_bytes(names[i][1]))
@@ -152,7 +151,7 @@ for line in fsrc:
       i += 1
    if len(tokens) > 0:
       lines.append(tokens)
-   
+
 find_names()
 if lines_to_bin_step1():
    resolve_names()
