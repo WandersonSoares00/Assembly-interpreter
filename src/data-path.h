@@ -12,8 +12,8 @@ typedef struct Register_bank{
     Word32 MAR;
     Word32 MDR;
     //ler o programa executável, grupo de bytes, do nível ISA
-    Byte PC;
-    Word8 MBR;
+    Word32 PC;
+    Word32 MBR;
 }Reg_bank;
 
 
