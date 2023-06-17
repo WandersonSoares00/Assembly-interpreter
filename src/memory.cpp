@@ -14,24 +14,27 @@ void MainMemory :: write_word(Word addr, Word value){
     memory[addr] = value;
 }
 
- // retorna o conteúdo do byte bt da memória principal
- Byte MainMemory :: read_byte(unsigned long int bt){
-    bt &= 0b111111111111111111;     //*
+// retorna o conteúdo do byte bt da memória principal
+Byte MainMemory :: read_byte(unsigned long int bt){
+    bt &= 0b1111'1111'1111'1111'11;     //18 1's
     Word word_addr = bt >> 2;           // bt / 4
     Word val_word = memory[word_addr];
-
+    
     Byte bt_pos = bt & 0b11;         // resto da divisão por 4
     Word val_byte = val_word >> (bt_pos << 3);  //desloca o valor do byte até a posição mais à esquerda
-    val_byte &= 0xFF;               //  zera o restante
+
+    val_byte = val_byte & 0xFF;               //  zera o restante
+
     return val_byte;
 }
 
 // escreve no byte "bt" da memória o byte value
 // 262.144 * 4 = 1048576(100000000000000000000) bytes possíveis para escrita
-void MainMemory :: write_byte(unsigned long int bt, Byte value){
+void MainMemory :: write_byte(unsigned long int bt, unsigned long int value){
     bt &= 0b111111111111111111;
-    //value &= 0xFF;
+    value &= 0xFF;
     Word word_addr = bt >> 2;           // bt / 4
+    
     Word word_val = memory[word_addr];
 
     Byte bt_pos = bt & 0b11;         // resto da divisão por 4
@@ -39,10 +42,12 @@ void MainMemory :: write_byte(unsigned long int bt, Byte value){
     // desloca 1 byte até a posição alvo na palavra onde bt está localizado
     Word mask = 0xFF << (bt_pos << 3);  // 0xFF << (bt_pos * 8)
     mask = ~mask;                       // deixa zerado o espaço do byte onde value será escrito
+    
     word_val &= mask;
-
+    
     value <<= (bt_pos << 3);    //  value <<= (bt_pos * 8);
+    
     memory[word_addr] = word_val | value;
 }
-    
+
 

@@ -2,7 +2,7 @@
 #define MEMORY_HPP
 
 #include "control_path.hpp"
-
+#include "common.hpp"
 
 struct MainMemory{
     // memória de 1 mbyte, cada palavra consistindo em 4 bytes
@@ -11,7 +11,7 @@ struct MainMemory{
     Word read_word(Word addr);
     void write_word(Word addr, Word value);
     Byte read_byte(unsigned long int bt);
-    void write_byte(unsigned long int bt, Byte value);
+    void write_byte(unsigned long int bt, unsigned long int value);
 };
 
 
