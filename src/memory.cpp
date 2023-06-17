@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../memory.hpp"
+#include "inc/memory.hpp"
 
 //std::array<Word32, 1024 * 1024 / 4> memory = {};
 
