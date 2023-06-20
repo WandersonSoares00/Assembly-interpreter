@@ -1,8 +1,12 @@
-
+#include <iostream>
 #include "inc/cpu.hpp"
 
 void Cpu :: setFirmware(Word *firm){
     firmware = firm;
+}
+
+void Cpu :: setMemory(MainMemory *men){
+    memory = men;
 }
 
 void Cpu :: read_regs(int reg){
@@ -20,7 +24,7 @@ void Cpu :: read_regs(int reg){
         case 4:
             BUS_B = registers.Y;     break;
         default:
-            BUS_B = 0;
+            break;  //BUS_B = 0;
     }
 }
 
@@ -55,6 +59,8 @@ Word Cpu :: shifter(Word alu_out, short int select_bits){
 void Cpu :: alu(long int control_bits){
     short int shift_bits = control_bits & 0b11000000;
     shift_bits = shift_bits >> 6;
+    
+    control_bits = control_bits & 0b00111111;
 
     Word in_a = registers.H;
     Word in_b = BUS_B;
@@ -93,6 +99,8 @@ void Cpu :: alu(long int control_bits){
             out = 1;                break;
         case 0b110010:  
             out = -1;               break;
+        case 0b00000:  
+            out = 0;                break;
 
     }
 	if (out == 0){
@@ -111,6 +119,8 @@ void Cpu :: next_instruction(Word next_inst, Byte jmpc){
 
     if (jmpc == 0b000){
         MPC = next_inst;
+        //std::cout << bin <1> (jmpc) << '\n';
+        //std::cout << bin <4> (MPC) << '\n';
         return;
     }
 
@@ -129,14 +139,14 @@ void Cpu :: next_instruction(Word next_inst, Byte jmpc){
     MPC = next_inst;
 }
 
-void Cpu :: memory_io(MainMemory *men, Byte memory_bits){
+void Cpu :: memory_io(Byte memory_bits){
     
     if (memory_bits & 0b001)  //fetch
-        registers.MBR = men -> read_byte(registers.PC);
+        registers.MBR = memory -> read_byte(registers.PC);     // retorna memory[PC//4][PC%4]
     if (memory_bits & 0b010)  //read
-        registers.MBR = men -> read_word(registers.MAR);
+        registers.MDR = memory -> read_word(registers.MAR);    // retorna memory[MAR]
     if (memory_bits & 0b100)  //write
-        men -> write_word(registers.MAR, registers.MDR);
+        memory -> write_word(registers.MAR, registers.MDR);    // memory[MAR] = MDR
 }
 
 bool Cpu :: run(){
@@ -145,9 +155,10 @@ bool Cpu :: run(){
     if (MIR == 0)   //quit
         return false;
     
-    read_regs        ( MIR & 0b11);
+    read_regs        ( MIR & 0b111);
     alu              ((MIR & 0b11111111000000000000) >> 12);
-    write_regs       ((MIR & 111111000000) >> 6);
+    write_regs       ((MIR & 0b111111000000) >> 6);
+    memory_io        ((MIR & 0b111000) >> 3);
     next_instruction ((MIR & 0b11111111100000000000000000000000) >> 23, (MIR & 0b11100000000000000000000) >> 20);
 
     return true;

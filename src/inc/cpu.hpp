@@ -3,6 +3,7 @@
 
 #include "control_path.hpp"
 #include "memory.hpp"
+#include "common.hpp"
 
 typedef struct Register_bank{
     Word PC = 0;
@@ -33,15 +34,18 @@ struct Cpu{
     Word BUS_C = 0;
     // --------- Memória de controle ----------
     Word *firmware;
-    
+    // --------- Memória Principal ----------
+    MainMemory *memory;    
+
     void setFirmware(Word *firm);
+    void setMemory(MainMemory *men);
     void read_regs(int reg);
     void write_regs(int reg_bits);  // reg_bits = C
     Word shifter(Word alu_out, short int select_bits);
     void alu(long int control_bits);
     void next_instruction(Word next_inst, Byte jam);
     
-    void memory_io(MainMemory *men, Byte memory_bits);
+    void memory_io(Byte memory_bits);
     bool run();
     int start();
 };
