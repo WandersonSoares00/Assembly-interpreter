@@ -7,13 +7,16 @@ RM = rm -rf
 
 all: $(OBJ_DIR) $(PROJ_NAME)
 
-$(PROJ_NAME):	$(OBJ_DIR)/main.o $(OBJ_DIR)/memory.o
+$(PROJ_NAME):	$(OBJ_DIR)/main.o $(OBJ_DIR)/memory.o $(OBJ_DIR)/cpu.o
 	$(CXX) $(CPPFLAGS) $^  -o $(PROJ_NAME) 
 
 $(OBJ_DIR)/main.o:	main.cpp
 	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/memory.o: src/memory.cpp
+	$(CXX) $(CPPFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/cpu.o:	src/cpu.cpp
 	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
