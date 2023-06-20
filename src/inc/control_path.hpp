@@ -12,12 +12,13 @@ typedef unsigned long int Word;   // palavra de dados(de  bits) da memória
 /*
 // 5 bits p/ prox instrução + 3 jump + 8 p/ ALU + 9 p/ BUS_C + 3 p/ memória principal + 4 p/ BUS_B
 //Word control_memory[];
-Word MPC;
-Word MIR;     //29 bits usáveis (- 3 bits p/ RAM)
+
+     //29 bits usáveis (- 3 bits p/ RAM)
 
 Word BUS_A;
 Word BUS_B;
 Word BUS_C;
 
 */
+
 #endif

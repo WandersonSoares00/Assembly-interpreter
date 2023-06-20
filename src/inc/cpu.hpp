@@ -10,7 +10,6 @@ typedef struct Register_bank{
     Word MBR = 0;
     Word MAR = 0;
     Word H = 0;
-    Word MIR = 0;
 
     Word X = 0, Y = 0;
     
@@ -24,6 +23,8 @@ typedef struct Register_bank{
 struct Cpu{
     // -------- Banco de registradores --------
     Reg_bank registers;
+    Word MIR = 0;
+    Word MPC = 0;
     Byte N = 0;
     Byte Z = 1;
     // --------- Barramentos ------------------
@@ -31,16 +32,18 @@ struct Cpu{
     Word BUS_B = 0;
     Word BUS_C = 0;
     // --------- Memória de controle ----------
-    Word firmware[512];
+    Word *firmware;
     
+    void setFirmware(Word *firm);
     void read_regs(int reg);
     void write_regs(int reg_bits);  // reg_bits = C
     Word shifter(Word alu_out, short int select_bits);
     void alu(long int control_bits);
-    void next_instruction(Byte jam);
+    void next_instruction(Word next_inst, Byte jam);
     
     void memory_io(MainMemory *men, Byte memory_bits);
-    void run();
+    bool run();
+    int start();
 };
 
 
