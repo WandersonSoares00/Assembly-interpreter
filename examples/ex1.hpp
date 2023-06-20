@@ -1,6 +1,6 @@
 
 
-// Escreva um programa que soma o valor da posição de memória 0 com e 1 e escreva o resultado na posição 3
+// Escreva um programa que some o valor da posição de memória 0 com a posição 1 e escreva o resultado na posição 3
 
 /*
     formato de microinstrução (de 32 bits):
@@ -33,7 +33,7 @@ unsigned long int* get_firmware (){
         firmware[4] = 0b000000101'000'00110101'100000'000'011; // bus_b = x, ++bus_b, mar = bus_b (mar = 3)
         firmware[5] = 0b000000110'000'00000000'000000'000'000; // bus_b = mdr
 
-        firmware[6] = 0b111111111'000'00111100'010000'100'000; // bus_c = bus_b(mdr) + bus_a, mdr = bus_c, men[3] = mdr
+        firmware[6] = 0b111111111'000'00111100'010000'100'000; // bus_c = bus_b(mdr) + bus_a, mdr = bus_c, men[3] = mdr, halt
         
         firmware[511] = 0;  // halt
 
