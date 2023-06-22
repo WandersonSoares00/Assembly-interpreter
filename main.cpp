@@ -1,25 +1,34 @@
 #include <iostream>
 #include "src/inc/memory.hpp"
 #include "src/inc/cpu.hpp"
-#include "examples/ex1.hpp"
+#include "examples/firmware.hpp"
 
 using namespace std;
 
 int main(){
-	MainMemory men;
-	Cpu cpu;
+		MainMemory men;
+		Cpu cpu;
+		cpu.setMemory(&men);
+		Word *firmware = get_firmware();
+		cpu.setFirmware(firmware);
+	
+	men.write_word(50, 80);		//men[50] = 80
+	men.write_word(100, 15);	//men[100] = 15
 
-	men.write_word(0, 12);
-	men.write_word(1, 37);
+	// x = x + men[50]
+	men.write_byte(1, 2);	// operando 2: soma
+	men.write_byte(2, 50);	// 50 é o endereço de men[50]
 
-	cpu.setMemory(&men);
-	Word *firmware = get_firmware();
-	cpu.setFirmware(get_firmware());
+	// x = x + men[100]
+	men.write_byte(3, 2);
+	men.write_byte(4, 100);
 
-	int time = cpu.start();
+	//cout << bin <8> (men.read_byte(4)) << '\n';
+	
+	int time = cpu.start(true);
 	cout << "Execução finalizada em: " << time << " passos\n";
 
-	cout << men.read_word(3) << '\n';
+	cout << cpu.registers.X << '\n';
 
 	delete[] firmware;
 

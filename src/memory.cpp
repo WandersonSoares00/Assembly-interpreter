@@ -9,14 +9,14 @@ Word MainMemory :: read_word(Word addr){
 }
 
 void MainMemory :: write_word(Word addr, Word value){
-    addr &= 0b111111111111111111; // OBS
+    addr &= 0b1111111111111111111; // OBS   (+1)
     value &= 0xFFFFFFFF; // 8 F's
     memory[addr] = value;
 }
 
 // retorna o conteúdo do byte bt da memória principal
 Byte MainMemory :: read_byte(unsigned long int bt){
-    bt &= 0b1111'1111'1111'1111'11;     //18 1's
+    bt &= 0b11111'1111'1111'1111'11;     //18 1's   (+1)
     Word word_addr = bt >> 2;           // bt / 4
     Word val_word = memory[word_addr];
     
@@ -31,7 +31,7 @@ Byte MainMemory :: read_byte(unsigned long int bt){
 // escreve no byte "bt" da memória o byte value
 // 262.144 * 4 = 1048576(100000000000000000000) bytes possíveis para escrita
 void MainMemory :: write_byte(unsigned long int bt, unsigned long int value){
-    bt &= 0b111111111111111111;
+    bt &= 0b111111111111111111; //(+1)
     value &= 0xFF;
     Word word_addr = bt >> 2;           // bt / 4
     

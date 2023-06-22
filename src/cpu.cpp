@@ -29,7 +29,7 @@ void Cpu :: read_regs(int reg){
 }
 
 void Cpu :: write_regs(int reg_bits){   //6 bits de seleção
-    if (reg_bits & 0b100000)    
+    if (reg_bits & 0b100000)  
 		registers.MAR = BUS_C;
 	if (reg_bits & 0b010000)
 		registers.MDR = BUS_C;
@@ -134,6 +134,7 @@ void Cpu :: next_instruction(Word next_inst, Byte jmpc){
 
     if (jmpc & 0b100){  // próxima instrução vem da memória principal
         next_inst |= registers.MBR;
+        //std::cout << "MBR: " << registers.MBR << "\tnext: " << bin<4>(next_inst) << '\n';
     }
 
     MPC = next_inst;
@@ -151,7 +152,7 @@ void Cpu :: memory_io(Byte memory_bits){
 
 bool Cpu :: run(){
     MIR = firmware[MPC];
-
+    std::cout << bin <4> (MIR) << '\n';
     if (MIR == 0)   //quit
         return false;
     
@@ -164,12 +165,13 @@ bool Cpu :: run(){
     return true;
 }
 
-int Cpu :: start(){
+int Cpu :: start(bool display = false){
     int count = 0;
 
     while (true){
         if ( run() )        ++count;
         else                break;
+        if (display)        std::cout << count << " passos executados...\n";
     }
 
     return count;

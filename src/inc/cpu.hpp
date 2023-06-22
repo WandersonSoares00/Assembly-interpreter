@@ -1,6 +1,7 @@
 #ifndef CPU_H
 #define CPU_H
 
+#include <iostream>
 #include "control_path.hpp"
 #include "memory.hpp"
 #include "common.hpp"
@@ -47,7 +48,7 @@ struct Cpu{
     
     void memory_io(Byte memory_bits);
     bool run();
-    int start();
+    int start(bool display);
 };
 
 
