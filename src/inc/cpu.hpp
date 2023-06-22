@@ -49,6 +49,8 @@ struct Cpu{
     void memory_io(Byte memory_bits);
     bool run();
     int start(bool display);
+
+    void imprime_regs(bool binary=true);
 };
 
 

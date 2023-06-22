@@ -30,8 +30,10 @@ int main(){
 
 	cout << cpu.registers.X << '\n';
 
+	cpu.imprime_regs(); 		// binario
+	cpu.imprime_regs(false);	// decimal
+
 	delete[] firmware;
 
 	return EXIT_SUCCESS;
 }
-

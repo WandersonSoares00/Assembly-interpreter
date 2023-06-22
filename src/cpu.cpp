@@ -1,6 +1,31 @@
 #include <iostream>
 #include "inc/cpu.hpp"
 
+void Cpu :: imprime_regs(bool binary) {
+	if ( binary ) {
+		std::cout << "REGISTRADORES:" << '\n';
+		std::cout << "\tMAR -> " << bin <4> (registers.MAR) << '\n';
+		std::cout << "\tMDR -> " << bin <4> (registers.MDR) << '\n';
+		std::cout << "\tMBR -> " << bin <4> (registers.MBR) << '\n';
+		std::cout << "\tMIR -> " << bin <4> (MIR) << '\n';
+		std::cout << "\tPC  -> " << bin <4> (registers.PC) << '\n';
+		std::cout << "\tX   -> " << bin <4> (registers.X) << '\n';
+		std::cout << "\tY   -> " << bin <4> (registers.Y) << '\n';
+		std::cout << "\tH   -> " << bin <4> (registers.H) << '\n';
+	} else {
+		std::cout << "REGISTRADORES:" << '\n';
+		std::cout << "\tMAR -> " << (registers.MAR) << '\n';
+		std::cout << "\tMDR -> " << (registers.MDR) << '\n';
+		std::cout << "\tMBR -> " << (registers.MBR) << '\n';
+		std::cout << "\tMIR -> " << (MIR) << '\n';
+		std::cout << "\tPC  -> " << (registers.PC) << '\n';
+		std::cout << "\tX   -> " << (registers.X) << '\n';
+		std::cout << "\tY   -> " << (registers.Y) << '\n';
+		std::cout << "\tH   -> " << (registers.H) << '\n';
+	}
+}
+
+
 void Cpu :: setFirmware(Word *firm){
     firmware = firm;
 }
