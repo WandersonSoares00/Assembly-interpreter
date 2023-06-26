@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <map>
 #include "inc/common.hpp"
+#include <cmath>
 
 using namespace std;
 
@@ -110,7 +111,9 @@ bool encode_var(string& line_var, unsigned long int &buff){
     if (pos == string::npos)
         return false;
     string var = line_var.substr(0, pos);
+    
     buff = vars[var].value;
+
     return true;
 }
 
@@ -149,9 +152,12 @@ int main(int argc, char **argv) {
 
     vector<string> lines;
     string line;
+    size_t pos;
 
     while (getline(input, line)) {
         line.erase( remove_if(line.begin(), line.end(), ::isspace ), line.end() );
+        if ( (pos = line.find(';')) != string::npos )
+            line.erase(pos);
         lines.push_back(line);
     }
     
@@ -159,7 +165,7 @@ int main(int argc, char **argv) {
     
     int i = 0;
     int row = 0;
-    size_t pos;
+    int last_byte = 0;
 
     //      --- Leitura de variáveis ----
     for (auto& l : lines) {
@@ -168,19 +174,23 @@ int main(int argc, char **argv) {
         else if ((pos = is_variable(l)) != string::npos){
             if (!set_var(l, i, pos)){
                 cerr << "Erro de sintaxe na linha " << row <<  '\n';
-                return EXIT_FAILURE;    
+                return EXIT_FAILURE;
             }
+            last_byte = i;
+            i += 4;
         }
-        
-        if (is_label(l))
+        else if (is_label(l))
             set_label(l, i+1);
         else
-            ++i;
+            i += 2;
     }
     
     i = 0;
     unsigned long int buff = 0;
     int bytes = 0;
+
+    output.write((char*) &last_byte, 1);
+
     //      --- 
     for (auto& l : lines) {
         ++row;

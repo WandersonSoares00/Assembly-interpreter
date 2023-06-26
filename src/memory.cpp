@@ -50,4 +50,11 @@ void MainMemory :: write_byte(unsigned long int bt, long int value){
     memory[word_addr] = word_val | value;
 }
 
-
+void MainMemory :: print_memory(int words){
+    while(--words){
+        for (int i = 0; i < 4; ++i){
+            std::cout << read_byte(i*words) << " | ";
+        }
+        std::cout << '\n';
+    }
+}

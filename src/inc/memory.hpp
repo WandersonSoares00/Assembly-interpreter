@@ -12,6 +12,7 @@ struct MainMemory{
     void write_word(Word addr, Word value);
     Byte read_byte(unsigned long int bt);
     void write_byte(unsigned long int bt, long int value);
+    void print_memory(int words);
 };
 
 
