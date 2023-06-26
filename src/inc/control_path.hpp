@@ -7,7 +7,7 @@ typedef unsigned char Byte;
 
 //  typedef Byte Word8;   // palavra de dados de 8 bits
 
-typedef unsigned long int Word;   // palavra de dados(de  bits) da memória
+typedef long int Word;   // palavra de dados(de  bits) da memória
 
 /*
 // 5 bits p/ prox instrução + 3 jump + 8 p/ ALU + 9 p/ BUS_C + 3 p/ memória principal + 4 p/ BUS_B
