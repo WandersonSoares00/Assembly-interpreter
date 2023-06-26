@@ -1,3 +1,5 @@
+#ifndef FIRMWARE_HPP
+#define FIRMWARE_HPP
 
 /*
     *Implementação de um computador de propósito geral, segue o conjunto de instruções:
@@ -12,8 +14,8 @@
 // Operando: valor para que a instrução precisa para executar
 //      x == y  ?
 
-unsigned long int* get_firmware (){
-        unsigned long int *firmware = new unsigned long int[512];
+long int* get_firmware (){
+        long int *firmware = new long int[512];
 
         /*      Instrução 1     */
         // incrementa pc, carrega o endereço da instrução no mbr e vai executar a instrução(goto mbr)
@@ -71,5 +73,5 @@ unsigned long int* get_firmware (){
 }
 
 
-
+#endif
 
