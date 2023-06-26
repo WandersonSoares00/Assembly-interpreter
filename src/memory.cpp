@@ -51,9 +51,9 @@ void MainMemory :: write_byte(unsigned long int bt, long int value){
 }
 
 void MainMemory :: print_memory(int words){
-    while(--words){
-        for (int i = 0; i < 4; ++i){
-            std::cout << read_byte(i*words) << " | ";
+    for (int j = 0; j < words; ++j){
+        for (int i = 4*j; i < (4*j) + 4; ++i){
+            std::cout << (int) read_byte(i) << " | ";
         }
         std::cout << '\n';
     }
