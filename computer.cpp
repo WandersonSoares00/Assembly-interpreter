@@ -20,19 +20,20 @@ int main (int argc, char **argv){
 
     ifstream input (argv[1], ios::in);
 
+    // byte correspondente a última variável do código usada para saída de dados (cuja word é out/4)
+    int out = input.get();
+
     int i = 1;
     men.write_byte (0, 0x00);
 
-    int out = input.get();
-    cout << out << '\n';
     while ( !input.eof() ){
         men.write_byte (i, input.get());
         ++i;
     }
 
-    men.print_memory(5);
-    
-    int time = cpu.start(true);
+    //men.print_memory(5);
+
+    int time = cpu.start(false);
     
     cout << "Resultado: " << men.read_word(out/4) << '\n';
 
@@ -42,9 +43,4 @@ int main (int argc, char **argv){
     delete[] firmware;
     return EXIT_SUCCESS;
 }
-
-
-
-
-
 
