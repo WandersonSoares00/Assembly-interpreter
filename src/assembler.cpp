@@ -11,7 +11,7 @@
 using namespace std;
 
 map <string, unsigned char> instructions{
-    {"add",   0x02}, {"mov",  0x0A}, {"goto", 0x09},
+    {"add",   0x02}, {"mov",  0x06}, {"goto", 0x09},
     {"jmz",   0x0B}, {"sub",  0x0D}, {"halt", 0xFF}
 };
 
@@ -172,7 +172,7 @@ int main(int argc, char **argv) {
         ++row;
         if ( l.empty() );
         else if ((pos = is_variable(l)) != string::npos){
-            if (!set_var(l, i, pos)){
+            if (!set_var(l, (i/4), pos)){       // assegure a que não terá truncamento
                 cerr << "Erro de sintaxe na linha " << row <<  '\n';
                 return EXIT_FAILURE;
             }
