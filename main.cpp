@@ -22,6 +22,15 @@ int main(){
 
 	men.write_word(2, 80);		//men[50] = 80
 	men.write_word(3, 150);	//men[100] = 150
+	/*
+		--- Equivalente à linha 22 ---
+	men.write_byte(200, 0b01010000);	 // o byte de mais baixa ordem deve ser lido primeiro
+	men.write_byte(201, 0b00000001);
+	men.write_byte(202, 0b00000000);
+	men.write_byte(203, 0b00000000);
+
+	cout << men.read_word(50) << '\n';
+	*/
 
 	// x = x + men[50]
 	//men.write_byte(1, 2);	// operando 2: soma
