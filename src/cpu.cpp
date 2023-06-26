@@ -149,11 +149,11 @@ void Cpu :: next_instruction(Word next_inst, Byte jmpc){
         return;
     }
 
-    if (jmpc & 0b001){   // jamz
+    if (jmpc & 0b001){   // jamz, goto 256 posições à frente
         next_inst |= (Z << 8);
     }
 
-    if (jmpc & 0b010){  //jamn
+    if (jmpc & 0b010){   // jamn, goto 256 posições atrás
         next_inst |= (N << 8);
     }
 
@@ -177,7 +177,7 @@ void Cpu :: memory_io(Byte memory_bits){
 
 bool Cpu :: run(){
     MIR = firmware[MPC];
-    std::cout << bin <4> (MIR) << '\n';
+    
     if (MIR == 0)   //quit
         return false;
     
@@ -190,13 +190,17 @@ bool Cpu :: run(){
     return true;
 }
 
-int Cpu :: start(bool display = false){
+int Cpu :: start(bool display){
     int count = 0;
 
     while (true){
         if ( run() )        ++count;
         else                break;
-        if (display)        std::cout << count << " passos executados...\n";
+        
+        if (display){
+            std::cout << count << " passos executados...\n";
+            imprime_regs(false);
+        }
     }
 
     return count;
