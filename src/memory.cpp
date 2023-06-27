@@ -52,8 +52,10 @@ void MainMemory :: write_byte(unsigned long int bt, long int value){
 
 void MainMemory :: print_memory(int words){
     for (int j = 0; j < words; ++j){
-        for (int i = 4*j; i < (4*j) + 4; ++i){
-            std::cout << (int) read_byte(i) << " | ";
+        Word wd = read_word(j);
+        for (int i = 0; i < 4; ++i){
+            unsigned char bt = (wd & (0xFF << (i*8))) >> i*8;
+            std::cout << (int) bt << " | ";
         }
         std::cout << '\n';
     }
