@@ -47,6 +47,9 @@ bool set_var(string& line_var, int addr, int n){
     string var = line_var.substr(0, n);
     vars[var] = {addr, val};
 
+    cout << line_var << " : " << addr << '\n';
+
+
     return true;
 }
 
@@ -58,9 +61,15 @@ bool is_label(string& line){
     return false;
 }
 
-void set_label(string& line_label, int id){
-    line_label.pop_back();  // rm :
-    labels[line_label] = id;
+bool set_jump(string label, unsigned long int &buff){
+    //cout << label << "\n";
+    if (labels.count(label) > 0 ){
+        int id = labels[label];
+        buff |= (0xFF00 & (id << 8));
+        return true;
+    }
+    else
+        return false;
 }
 
 bool set_ops(string& line, unsigned long int &oper){
@@ -71,8 +80,10 @@ bool set_ops(string& line, unsigned long int &oper){
             struct posMen value = vars[var];
             oper |= (0xFF00 & (value.addr << 8) );
         }
-        else
+        else{
+            cerr << "Variável " << var << " não identificada.\n";
             return false;
+        }
     }
     return true;
 }
@@ -81,26 +92,31 @@ int encode_operand(string& line, unsigned long int &oper){
     //static int ind = 1;
     //if (line.empty())     return;
     int bytes = -1;
-
-    if (line.find("add")==0 or line.find("mov")==0 or line.find("jmz")==0 or line.find("sub")==0){
+    
+    if (line.find("add")==0 or line.find("mov")==0 or line.find("sub")==0){
         oper |= instructions[line.substr(0, 3)];
         line.erase(0, 3);   // desnescessário
-        //cout << line << "  " << (0xFF & oper) << "  " << '\n';
         if (set_ops(line, oper))   bytes = 2;
+    }
+    else if (line.find("jmz") == 0){
+        oper |= instructions[line.substr(0, 3)];
+        line.erase(0, 3);   // desnescessário
+        if (line[0] == 'x' and line[1] == ',' and set_jump(line.substr(2), oper))
+            bytes = 2;
+        else
+            cerr << "Não foi possível identificar o rótulo associado a " << line << '\n';
     }
     else if (line.find("halt") == 0 ){
         oper = instructions["halt"];
         bytes = 1;
     }
     else if (line.find("goto") == 0 ){
-        oper = instructions["goto"];
-        string label = line.substr(4);
-        if (labels.count(label) > 0 ){
-            int id = labels[label];
-            oper |= instructions["goto"];
-            oper |= (0xFF00 & (id << 8));
+        oper |= instructions["goto"];
+        line.erase(0, 4);
+        if (set_jump(line, oper))
             bytes = 2;
-        }
+        else
+            cerr << "Não foi possível identificar o rótulo associado a " << line << '\n';
     }
 
     return bytes;
@@ -124,6 +140,7 @@ bool encode_byte(string& line_wb, unsigned long int &buff){
     int val;
     stringstream origem(line_wb);
     origem.ignore(2) >> val;
+    cout << val << '\n';
     if ( origem.fail() or val > 255 )
         return false;
     
@@ -163,7 +180,7 @@ int main(int argc, char **argv) {
     
     input.close();
     
-    int i = 0;
+    int i = 1;
     int row = 0;
     int last_byte = 0;
 
@@ -179,13 +196,17 @@ int main(int argc, char **argv) {
             last_byte = i;
             i += 4;
         }
-        else if (is_label(l))
-            set_label(l, i+1);
+        else if (is_label(l)){
+            labels[l.substr(0, l.length() - 1)] = i + 1;
+        }
+        else if (l.find("wb") == 0)
+            ++i;
         else
             i += 2;
-    }
-    
+    } 
+
     i = 0;
+    row = 0;
     unsigned long int buff = 0;
     int bytes = 0;
 
@@ -195,11 +216,11 @@ int main(int argc, char **argv) {
     for (auto& l : lines) {
         ++row;
 
-        if ( l.empty() );
+        if (l.empty() or is_label(l));
         else if (encode_byte(l, buff))
-            ++bytes;
+            bytes = 1;
         else if (encode_var(l, buff))
-            bytes += 4;
+            bytes = 4;
         else if ((bytes += encode_operand(l, buff)) == -1){
             cerr << "Erro de sintaxe na linha " << row << l << '\n';
             return EXIT_FAILURE;
