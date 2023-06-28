@@ -30,7 +30,7 @@ int main (int argc, char **argv){
 
     //men.print_memory(7);
 
-    int time = cpu.start(true);
+    int time = cpu.start(false);
     
     cout << "Resultado: " << men.read_word(1) << '\n';
 
