@@ -197,7 +197,7 @@ int main(int argc, char **argv) {
             i += 4;
         }
         else if (is_label(l)){
-            labels[l.substr(0, l.length() - 1)] = i + 1;
+            labels[l.substr(0, l.length() - 1)] = i;
         }
         else if (l.find("wb") == 0)
             ++i;
