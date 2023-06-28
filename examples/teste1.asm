@@ -1,7 +1,13 @@
-add x, b    ; wb (1, add), wb (2, b)
-sub x, a    ; wb (3, sub), wb (4, a)
-mov x, b    ; wb (5, mov), wb (6, b)
-halt        ; wb (7, halt)
+goto main
 
-a ww 80     ; men[2] = 80
-b ww 150    ; men[3] = 150
+wb 0
+
+res  ww 0
+var1 ww 80     ; men[2] = 80
+var2 ww 150    ; men[3] = 150
+
+main:
+    add x, var1    ; wb (1, add), wb (2, b)
+    sub x, var2    ; wb (3, sub), wb (4, a)
+    mov x, res     ; wb (5, mov), wb (6, b)
+    halt           ; wb (7, halt)
