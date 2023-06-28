@@ -9,7 +9,9 @@
     * 4) goto address
     * 5) if X = 0 then goto address (próximo)
     * 6) X = X - mem[address]
-    * 7) halt
+    * 7) X = X * men[address]
+    * 8) X = X / men[address]
+    * 9) halt
 */
 // Operando: valor para que a instrução precisa para executar
 //      x == y  ?
@@ -65,8 +67,27 @@ long int* get_firmware (){
         firmware[15]  =  0b000010000'000'00010100'000001'000'000;
         firmware[16]  =  0b000000000'000'00111111'000100'000'011;
 
+        /*      Instrução 7  ->  X = X * mem[address]    */
+        //  17: PC <- PC + 1; fetch; goto 18
+        //  18: MAR <- MBR; read; goto 19
+        //  19: H <- MDR; goto 20
+        //  20: X <- X * H; goto 0
+        firmware[17]  =  0b000010010'000'00110101'001000'001'001;
+        firmware[18]  =  0b000010011'000'00010100'100000'010'010;
+        firmware[19]  =  0b000010100'000'00010100'000001'000'000;
+        firmware[20]  =  0b000000000'000'00001100'000100'000'011;
 
-        /*    Instrução 7   -> halt      */
+        /*      Instrução 7  ->  X = X / mem[address]    */
+        //  17: PC <- PC + 1; fetch; goto 21
+        //  18: MAR <- MBR; read; goto 22
+        //  19: H <- MDR; goto 23
+        //  20: X <- X / H; goto 0
+        firmware[21]  =  0b000010110'000'00110101'001000'001'001;
+        firmware[22]  =  0b000010111'000'00010100'100000'010'010;
+        firmware[23]  =  0b000011000'000'00010100'000001'000'000;
+        firmware[24]  =  0b000000000'000'00011100'000100'000'011;
+
+        /*    Instrução 8   -> halt      */
         firmware[255] = 0;    // 7
 
         return firmware;
