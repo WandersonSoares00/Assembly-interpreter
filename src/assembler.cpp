@@ -12,7 +12,8 @@ using namespace std;
 
 map <string, unsigned char> instructions{
     {"add",   0x02}, {"mov",  0x06}, {"goto", 0x09},
-    {"jmz",   0x0B}, {"sub",  0x0D}, {"halt", 0xFF}
+    {"jmz",   0x0B}, {"sub",  0x0D}, {"mul",  0x11},
+    {"div",   0x15}, {"halt", 0xFF}
 };
 
 struct posMen   {  int addr; long int value;    };
@@ -46,9 +47,6 @@ bool set_var(string& line_var, int addr, int n){
     
     string var = line_var.substr(0, n);
     vars[var] = {addr, val};
-
-    cout << line_var << " : " << addr << '\n';
-
 
     return true;
 }
@@ -93,7 +91,8 @@ int encode_operand(string& line, unsigned long int &oper){
     //if (line.empty())     return;
     int bytes = -1;
     
-    if (line.find("add")==0 or line.find("mov")==0 or line.find("sub")==0){
+    if (line.find("add")==0 or line.find("mov")==0 or line.find("sub")==0 or line.find("mul")==0 \
+        or line.find("div")==0){
         oper |= instructions[line.substr(0, 3)];
         line.erase(0, 3);   // desnescessário
         if (set_ops(line, oper))   bytes = 2;
@@ -140,7 +139,6 @@ bool encode_byte(string& line_wb, unsigned long int &buff){
     int val;
     stringstream origem(line_wb);
     origem.ignore(2) >> val;
-    cout << val << '\n';
     if ( origem.fail() or val > 255 )
         return false;
     
@@ -182,8 +180,7 @@ int main(int argc, char **argv) {
     
     int i = 1;
     int row = 0;
-    int last_byte = 0;
-
+    
     //      --- Leitura de variáveis ----
     for (auto& l : lines) {
         ++row;
@@ -193,7 +190,6 @@ int main(int argc, char **argv) {
                 cerr << "Erro de sintaxe na linha " << row <<  '\n';
                 return EXIT_FAILURE;
             }
-            last_byte = i;
             i += 4;
         }
         else if (is_label(l)){
@@ -209,8 +205,6 @@ int main(int argc, char **argv) {
     row = 0;
     unsigned long int buff = 0;
     int bytes = 0;
-
-    output.write((char*) &last_byte, 1);
 
     //      --- 
     for (auto& l : lines) {

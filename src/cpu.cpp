@@ -114,17 +114,19 @@ void Cpu :: alu(long int control_bits){
             out = in_b - 1;         break;
         case 0b111011:
             out = -in_a;            break;
+        
         case 0b001100:
-            out = in_a & in_b;      break;
+            out = in_a * in_b;      break;
         case 0b011100:          
-            out = in_a | in_b;      break;
+            out = in_a / in_b;      break;
+        
         case 0b010000:
             out = 0;                break;
         case 0b110001:
             out = 1;                break;
         case 0b110010:  
             out = -1;               break;
-        case 0b00000:  
+        case 0b00000: 
             out = 0;                break;
 
     }
