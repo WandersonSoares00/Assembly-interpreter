@@ -4,7 +4,7 @@ wb 0
 
 res  ww 0
 v1   ww 30
-v2   ww 500
+v2   ww 52
 aux2 ww 0
 dec  ww 1
 

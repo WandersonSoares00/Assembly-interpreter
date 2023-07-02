@@ -9,16 +9,14 @@ b    ww 10
 one  ww 1
 
 main:
-    add x, b
+    ldr x, b
     jmz x, final
     sub x, one
     mov x, b
-    sub x, b
 
-    add x, res
+    ldr x, res
     mul x, a
     mov x, res
-    sub x, res
 
     goto main
 
