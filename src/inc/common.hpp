@@ -9,7 +9,4 @@ std::bitset<sizeof(T) * Q> bin(T number) {
     return binary;
 }
 
-
-
-
 #endif

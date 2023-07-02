@@ -135,7 +135,7 @@ void Cpu :: alu(long int control_bits){
         case 0b001100:
             out = in_a * in_b;      break;
         case 0b011100:          
-            out = in_a / in_b;      break;
+            out = in_b / in_a;      break;
         
         case 0b010000:
             out = 0;                break;
@@ -228,7 +228,7 @@ int Cpu :: start(bool display){
 
     while (true){
         if ( run() )        ++count;
-        else                break;
+        else        break;
         if (display){
             std::cout << count << " passos executados...\n";
             imprime_regs(false);

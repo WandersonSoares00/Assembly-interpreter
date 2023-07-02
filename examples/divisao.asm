@@ -4,8 +4,8 @@ wb 0
 
 i   ww 0        ; divisao inteira
 r   ww 0        ; resto da divisão
-a   ww 135
-b   ww 78
+a   ww 4
+b   ww 562
 one ww 1
 
 main:

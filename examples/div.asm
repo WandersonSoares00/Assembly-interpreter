@@ -1,16 +1,22 @@
-
+; 2. Calcula a divisão inteira de a por b e armazena na word 1 da memória e o resto da divisão na word 2
 goto main
 wb 0
 
-res  ww 0
-val1 ww 50
-val2 ww 200
+int    ww 0        ; divisao inteira
+rest   ww 0        ; resto da divisão
+a      ww 562
+b      ww 4
+one    ww 1
 
 main:
-    add x, val1
-    jmz x, final
-    div x, val2
-    mov x, res
+    ldr x, a      
+    div x, b      
+    mov x, int    
 
-final:
+    ldr y, b      
+    mul y, int    
+    ldr x, a      
+    sub x, y      
+    mov x, rest   
+
     halt

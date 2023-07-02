@@ -2,7 +2,7 @@
 #include <fstream>
 #include "src/inc/memory.hpp"
 #include "src/inc/cpu.hpp"
-#include "examples/firmware.hpp"
+#include "examples/firmware3.hpp"
 
 using namespace std;
 
@@ -28,15 +28,16 @@ int main (int argc, char **argv){
         ++i;
     }
 
-    //men.print_memory(7);
+    //men.print_memory(8);
 
     int time = cpu.start(false);
     
-    cout << "Resultado: " << men.read_word(1) << '\n';
+    cout << "word 1 da memória: " << men.read_word(1) << '\n';
+    cout << "word 2 da memória: " << men.read_word(2) << '\n';
 
 	cout << "Execução finalizada em: " << time << " passos\n\n";
 
-    //men.print_memory(7);
+    //men.print_memory(8);
     
     delete[] firmware;
     return EXIT_SUCCESS;

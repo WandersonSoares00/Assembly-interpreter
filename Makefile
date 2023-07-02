@@ -19,7 +19,7 @@ $(OBJ_DIR)/cpu.o:	src/cpu.cpp
 	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 assembler:
-	$(CXX) $(CPPFLAGS) src/assembler.cpp  -o assembler
+	$(CXX) $(CPPFLAGS) src/assembler/assembler.cpp  -o assembler
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)

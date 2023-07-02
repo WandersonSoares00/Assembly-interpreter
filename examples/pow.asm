@@ -3,22 +3,21 @@
 goto main
 wb 0
 
-res  ww 1
+res  ww 0
 a    ww 2
 b    ww 10
 one  ww 1
 
 main:
-    ldr x, b
-    jmz x, final
-    sub x, one
-    mov x, b
-
-    ldr x, res
-    mul x, a
-    mov x, res
-
-    goto main
+    ldr x, one
+    ldr y, b
+    
+    loop:
+        jmz y, final
+        mul x, a
+        sub y, one
+        goto loop
 
 final:
+    mov x, res
     halt
