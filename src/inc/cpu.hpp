@@ -40,12 +40,13 @@ struct Cpu{
 
     void setFirmware(Word *firm);
     void setMemory(MainMemory *men);
-    void read_regs(int reg);
+    void read_regs(int reg_a, int reg_b);
     void write_regs(int reg_bits);  // reg_bits = C
     Word shifter(Word alu_out, short int select_bits);
     void alu(long int control_bits);
     void next_instruction(Word next_inst, Byte jam);
-    
+    void ifu (Byte memory_bits);
+
     void memory_io(Byte memory_bits);
     bool run();
     int start(bool display = false);

@@ -34,10 +34,25 @@ void Cpu :: setMemory(MainMemory *men){
     memory = men;
 }
 
-void Cpu :: read_regs(int reg){
-    BUS_A = registers.H;
-    
-    switch (reg){
+void Cpu :: read_regs(int reg_a, int reg_b){
+    switch (reg_a){
+        case 0:
+            BUS_A = registers.MDR;   break;
+        case 1:
+            BUS_A = registers.PC;    break;
+        case 2:
+            BUS_A = registers.MBR;   break;
+        case 3:
+            BUS_A = registers.X;     break;
+        case 4:
+            BUS_A = registers.Y;     break;
+        case 5:
+            BUS_A = registers.H;     break;
+        default:
+            break;  //BUS_B = 0;
+    }
+
+    switch (reg_b){
         case 0:
             BUS_B = registers.MDR;   break;
         case 1:
@@ -48,6 +63,8 @@ void Cpu :: read_regs(int reg){
             BUS_B = registers.X;     break;
         case 4:
             BUS_B = registers.Y;     break;
+        case 5:
+            BUS_A = registers.H;     break;
         default:
             break;  //BUS_B = 0;
     }
@@ -87,7 +104,7 @@ void Cpu :: alu(long int control_bits){
     
     control_bits = control_bits & 0b00111111;
 
-    Word in_a = registers.H;
+    Word in_a = BUS_A;
     Word in_b = BUS_B;
     Word out = 0;
 
@@ -167,15 +184,28 @@ void Cpu :: next_instruction(Word next_inst, Byte jmpc){
     MPC = next_inst;
 }
 
+void Cpu :: ifu(Byte memory_bits){
+    if ( memory_bits & 0b001 ){
+        ++registers.PC;
+        registers.MBR = memory -> read_byte(registers.PC);      //fetch
+    }
+    if ( memory_bits & 0b010 ){
+        registers.MAR = registers.MBR;
+        registers.MDR = memory -> read_word(registers.MAR);    // retorna memory[MAR] (read)
+    }
+}
+
 void Cpu :: memory_io(Byte memory_bits){
-    
-    if (memory_bits & 0b001)  //fetch
-        registers.MBR = memory -> read_byte(registers.PC);     // retorna memory[PC//4][PC%4]
-    if (memory_bits & 0b010)  //read
-        registers.MDR = memory -> read_word(registers.MAR);    // retorna memory[MAR]
+    if ( memory_bits & 0b001 ){
+        registers.MBR = memory -> read_byte(registers.PC);      //fetch
+    }
+    if ( memory_bits & 0b010 ){
+        registers.MDR = memory -> read_word(registers.MAR);    // retorna memory[MAR] (read)
+    }
     if (memory_bits & 0b100)  //write
         memory -> write_word(registers.MAR, registers.MDR);    // memory[MAR] = MDR
 }
+
 
 bool Cpu :: run(){
     MIR = firmware[MPC];
@@ -183,11 +213,12 @@ bool Cpu :: run(){
     if (MIR == 0)   //quit
         return false;
     
-    read_regs        ( MIR & 0b111);
-    alu              ((MIR & 0b11111111000000000000) >> 12);
-    write_regs       ((MIR & 0b111111000000) >> 6);
-    memory_io        ((MIR & 0b111000) >> 3);
-    next_instruction ((MIR & 0b11111111100000000000000000000000) >> 23, (MIR & 0b11100000000000000000000) >> 20);
+    ifu              ((MIR & 0b111'000'000) >> 6);
+    read_regs        ((MIR & 0b111'000) >> 3, MIR & 0b111);
+    alu              ((MIR & 0b11111111'000000'000'000'000'000) >> 18);
+    write_regs       ((MIR & 0b111111'000'000'000'000) >> 12);
+    memory_io        ((MIR & 0b111'000'000'000) >> 9);
+    next_instruction ((MIR & 0b111111111'000'00000000'000000'000'000'000'000) >> 29, (MIR & 0b111'00000000'000000'000'000'000'000) >> 26);
 
     return true;
 }
@@ -198,7 +229,6 @@ int Cpu :: start(bool display){
     while (true){
         if ( run() )        ++count;
         else                break;
-        
         if (display){
             std::cout << count << " passos executados...\n";
             imprime_regs(false);
