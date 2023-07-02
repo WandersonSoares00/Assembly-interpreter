@@ -13,7 +13,7 @@ using namespace std;
 map <string, unsigned char> instructions{
     {"add",   0x02}, {"mov",  0x06}, {"goto", 0x09},
     {"jmz",   0x0B}, {"sub",  0x0D}, {"mul",  0x11},
-    {"div",   0x15}, {"halt", 0xFF}
+    {"div",   0x15}, {"ldr",  0x19}, {"halt", 0xFF}
 };
 
 struct posMen   {  int addr; long int value;    };
@@ -92,7 +92,7 @@ int encode_operand(string& line, unsigned long int &oper){
     int bytes = -1;
     
     if (line.find("add")==0 or line.find("mov")==0 or line.find("sub")==0 or line.find("mul")==0 \
-        or line.find("div")==0){
+        or line.find("div")==0 or line.find("ldr")==0){
         oper |= instructions[line.substr(0, 3)];
         line.erase(0, 3);   // desnescessário
         if (set_ops(line, oper))   bytes = 2;
@@ -232,7 +232,4 @@ int main(int argc, char **argv) {
 
     return EXIT_SUCCESS;
 }
-
-
-
 
