@@ -6,7 +6,7 @@ wb 0
 int    ww 0        ; divisao inteira
 rest   ww 0        ; resto da divisão
 a      ww 562
-b      ww 4
+b      ww 6
 one    ww 1
 
 main:
@@ -17,7 +17,7 @@ main:
     ldr y, b      
     mul y, int    
     ldr x, a      
-    sub x, y      
-    mov x, rest   
+    sub x, y
+    mov x, rest
 
     halt

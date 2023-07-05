@@ -16,6 +16,7 @@ main:
         jmz y, final
         mul x, a
         sub y, one
+        
         goto loop
 
 final:
