@@ -169,11 +169,11 @@ void Cpu :: next_instruction(Word next_inst, Byte jmpc){
     }
 
     if (jmpc & 0b001){   // jamz, goto 256 posições à frente
-        next_inst |= (Z << 8);
+        next_inst |= (Z << 7);
     }
 
     if (jmpc & 0b010){   // jamn, goto 256 posições atrás
-        next_inst |= (N << 8);
+        next_inst |= (N << 7);
     }
 
     if (jmpc & 0b100){  // próxima instrução vem da memória principal

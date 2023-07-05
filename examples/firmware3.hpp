@@ -37,7 +37,8 @@ long int* get_firmware (){
         /*      Instrução 5   ->  if X = 0 then goto address */
         firmware[4]  =  0b000000101'001'00010100'000100'000'000'000'011;
         firmware[5]  =  0b000000000'100'00000000'000000'000'101'000'000;
-        firmware[261] = 0b001100100'000'00000000'000000'000'000'000'000;
+        firmware[133] = 0b010010101'000'00000000'000000'000'000'000'000;
+
         /*      Instrução 6  ->  X = X - mem[address]    */
         firmware[6]  =  0b000000000'100'00111111'000100'000'111'000'011;
         /*      Instrução 7  ->  X = X * mem[address]    */
@@ -53,9 +54,15 @@ long int* get_firmware (){
         /*      Instrução 3    ->  mem[address] = Y  */
         firmware[19]  =  0b000000000'100'00010100'010000'100'111'000'100;
         /*      Instrução 5   ->  if Y = 0 then goto address */
+        // 20: X <- X; IF ALU = 0 GOTO 277 (256 à frente) ELSE GOTO 21
+        // 21: PC <- PC + 1; PC <- PC + 1; fetch; Goto mbr
+        // 277: GOTO 100
         firmware[20]  =  0b000010101'001'00010100'000010'000'000'000'100;
-        firmware[21]  =  0b000000000'100'00000000'000000'000'000'101'000;
-        firmware[277] =  0b001100100'000'00000000'000000'000'000'000'000;
+        firmware[21]  =  0b000000000'100'00000000'000000'000'101'000'000;
+
+        /*      Instrução 4    ->  goto address    */
+        firmware[149]  =  0b000000000'100'00010100'001000'001'001'000'010;  //aqui
+
         /*      Instrução 6  ->  Y = Y - mem[address]    */
         firmware[22]  =  0b000000000'100'00111111'000010'000'111'000'100;
         /*      Instrução 7  ->  Y = Y * mem[address]    */
@@ -75,8 +82,6 @@ long int* get_firmware (){
         /*      Instrução 8  ->  X = X / Y    */
         firmware[37]  =  0b000000000'100'00011100'000100'000'001'011'100;
 
-        /*      Instrução 4    ->  goto address    */
-        firmware[100]  =  0b000000000'100'00010100'001000'001'001'000'010;
         /*    Instrução 10   -> halt      */
         firmware[255] = 0;
 

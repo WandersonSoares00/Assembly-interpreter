@@ -8,7 +8,7 @@ one ww 1
 main:
     ldr x, one        ; x = a
     ldr y, a
-    
+
     loop:
         jmz y, final    ; if x==0 goto final
 

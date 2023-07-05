@@ -17,13 +17,12 @@
 #define DIVY   0x18
 #define LDRY   0x19
 
-#define ADDXY   0x22
-#define SUBXY   0x23
-#define MULXY   0x24
-#define DIVXY   0x25
+#define ADDXY  0x22
+#define SUBXY  0x23
+#define MULXY  0x24
+#define DIVXY  0x25
 
-
-#define GOTO   0x64
+#define GOTO   0x95
 #define HALT   0xFF
 
 

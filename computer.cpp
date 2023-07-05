@@ -28,9 +28,9 @@ int main (int argc, char **argv){
         ++i;
     }
 
-    //men.print_memory(8);
+    //men.print_memory(10);
 
-    int time = cpu.start(false);
+    int time = cpu.start();
     
     cout << "word 1 da memória: " << men.read_word(1) << '\n';
     cout << "word 2 da memória: " << men.read_word(2) << '\n';

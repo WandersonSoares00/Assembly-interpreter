@@ -11,7 +11,7 @@ one  ww 1
 main:
     ldr x, one
     ldr y, b
-    
+
     loop:
         jmz y, final
         mul x, a
