@@ -1,7 +1,6 @@
 #ifndef MEMORY_HPP
 #define MEMORY_HPP
 
-#include "control_path.hpp"
 #include "common.hpp"
 
 struct MainMemory{

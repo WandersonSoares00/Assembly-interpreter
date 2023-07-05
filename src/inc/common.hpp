@@ -9,4 +9,8 @@ std::bitset<sizeof(T) * Q> bin(T number) {
     return binary;
 }
 
+typedef unsigned char Byte;
+
+typedef long int Word;
+
 #endif

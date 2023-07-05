@@ -2,7 +2,6 @@
 #define CPU_H
 
 #include <iostream>
-#include "control_path.hpp"
 #include "memory.hpp"
 #include "common.hpp"
 
