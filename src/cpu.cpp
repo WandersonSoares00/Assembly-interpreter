@@ -186,12 +186,16 @@ void Cpu :: next_instruction(Word next_inst, Byte jmpc){
 
 void Cpu :: ifu(Byte memory_bits){
     if ( memory_bits & 0b001 ){
-        ++registers.PC;
+        registers.PC += 1;
         registers.MBR = memory -> read_byte(registers.PC);      //fetch
     }
     if ( memory_bits & 0b010 ){
         registers.MAR = registers.MBR;
         registers.MDR = memory -> read_word(registers.MAR);    // retorna memory[MAR] (read)
+    }
+    if ( memory_bits & 0b100 ){
+        registers.PC += 1;
+        registers.MBR = memory -> read_byte(registers.PC);      //fetch
     }
 }
 
@@ -209,7 +213,6 @@ void Cpu :: memory_io(Byte memory_bits){
 
 bool Cpu :: run(){
     MIR = firmware[MPC];
-    
     if (MIR == 0)   //quit
         return false;
     
@@ -232,6 +235,7 @@ int Cpu :: start(bool display){
         if (display){
             std::cout << count << " passos executados...\n";
             imprime_regs(false);
+            std::cout << " o mpc ::  " << MPC<<'\n';
         }
     }
 
