@@ -17,12 +17,13 @@
     * 12) Y = Y - mem[address]
     * 13) Y = Y * men[address]
     * 14) Y = Y / men[address]
-    * 15) Y = mem[address]
-    * 16) X = X + Y
-    * 17) X = X - Y
-    * 18) X = X * Y
-    * 19) X = X / Y
-    * 20) halt
+    * 15) mem[address] = Y
+    * 16) Y = mem[address]
+    * 17) X = X + Y
+    * 18) X = X - Y
+    * 19) X = X * Y
+    * 20) X = X / Y
+    * 21) halt
 */
 /*   Formato de microinstrução: prox_inst(9)'jamp(3)'ula(8)'bus_c(6)'memória(3)'ifu(3)'bus_a(3)'bus_b(3)*/
 
@@ -54,7 +55,7 @@ long int* get_firmware (){
 
         /*      Instrução 11  ->  Y = Y + mem[address]   */
         firmware[18] =   0b000000000'100'00111100'000010'000'111'000'100;
-        /*      Instrução 1    ->  mem[address] = Y  */
+        /*      Instrução 15    ->  mem[address] = Y  */
         firmware[19]  =  0b000000000'100'00010100'010000'100'111'000'100;
         /*      Instrução 10   ->  if Y = 0 then goto address */
         firmware[20]  =  0b000010101'001'00010100'000010'000'000'000'100;
@@ -69,20 +70,20 @@ long int* get_firmware (){
         firmware[23]  =  0b000000000'100'00001100'000010'000'111'000'100;
         /*      Instrução 14  ->  Y = Y / mem[address]    */
         firmware[24]  =  0b000000000'100'00011100'000010'000'111'000'100;
-        /*      Instrução 15  ->  Y = mem[address]    */
+        /*      Instrução 16  ->  Y = mem[address]    */
         firmware[25]  =  0b000000000'100'00010100'000010'100'111'000'000;
 
 
-        /*      Instrução 16  ->  X = X + Y   */
+        /*      Instrução 17  ->  X = X + Y   */
         firmware[34] =   0b000000000'100'00111100'000100'000'001'100'011;
-        /*      Instrução 17  ->  X = X - Y    */
+        /*      Instrução 18  ->  X = X - Y    */
         firmware[35]  =  0b000000000'100'00111111'000100'000'001'100'011;
-        /*      Instrução 18  ->  X = X * Y    */
+        /*      Instrução 19  ->  X = X * Y    */
         firmware[36]  =  0b000000000'100'00001100'000100'000'001'100'011;
-        /*      Instrução 19  ->  X = X / Y    */
+        /*      Instrução 20  ->  X = X / Y    */
         firmware[37]  =  0b000000000'100'00011100'000100'000'001'100'011;
 
-        /*    Instrução 20   -> halt      */
+        /*    Instrução 21   -> halt      */
         firmware[255] = 0;
 
         return firmware;
