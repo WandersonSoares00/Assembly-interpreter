@@ -18,7 +18,7 @@ Here is an ilustration of the micrcoarchitecture in a diagram.
 
 
 ## Usage
----
+
 ### Prerequisites
 
 - GNU C++ Compiler ( g++ )
