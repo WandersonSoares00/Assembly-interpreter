@@ -31,14 +31,17 @@ On debian-based linux distributions, run `sudo apt install make g++
 1. Clone the repository:
     `git clone https://github.com/WandersonSoares00/Assembly-interpreter`
 
-2. Compile the project:
+2. Change the directory:
+    `cd Assembly-interpreter`
+
+3. Compile the project:
     `make all`
 
-3. Generate a binary of an .asm program with the assembler
+4. Generate a binary of an .asm program with the assembler
     take program [questions/fat.asm](questions/fat.asm) as an example, run the following command:
     `./assembler questions/fat.asm outBin`
 
-4. Copy the binary in memory and run a computer:    `./comp outBin`
+5. Copy the binary in memory and run a computer:    `./comp outBin`
 
     For default, the computer print the word 1 and 2 of memory in the scream to simulate the [standard output](https://en.wikipedia.org/wiki/Standard_streams)
 
